@@ -3,13 +3,12 @@ import string
 import codecs
 import math
 
-# filename_list = ['pearhead.wrl']
 folder_in = 'wrl_files_here/'
 filename_out = ""
 gamma_factor = 2.2
 
 def sRGB2Linear(_float_val):
-	_linear_val = math.pow(_float_val, 2.2)
+	_linear_val = math.pow(_float_val, gamma_factor)
 	return _linear_val
 
 def main():
@@ -21,7 +20,6 @@ def main():
 			f_out = codecs.open(folder_in + filename_out, 'w')
 			vertex_color_start = False
 			for line in f:
-				# print(repr(line))
 				line_out = ''
 				if vertex_color_start:
 					if line.find(']') >= 0 and line.find('}') >= 0:
@@ -31,13 +29,10 @@ def main():
 					line_t = string.split(line.replace('\t', ' ').replace(']', ' ').replace('}', ' ').strip(), ' ')
 					for word in line_t:
 						word = word.replace(',', '')
-						# print('word = ' + word)
 						float_val = sRGB2Linear(float(word))
 						line_out += str(float_val) + ' '
 
 				if line_out != '':
-					# print('line     = ' + line)
-					# print('line_out = ' + line_out)
 					if vertex_color_start:
 						line_out += ','
 					else:
